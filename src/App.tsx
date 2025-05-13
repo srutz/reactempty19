@@ -1,13 +1,22 @@
-import { Suspense } from "react";
+import { useState } from "react";
 import { cn } from "./lib/utils";
 import { QuotePanel } from "./QuotePanel";
+import { Activity } from "./TypedActivity";
+
 
 export function App() {
+    const [visible, setVisible] = useState(true)
     return (
         <div className={cn("bg-gray-100 h-1 grow flex flex-col justify-center")}>
-            <Suspense fallback={<p>⌛Downloading data...</p>}>
+            <Activity mode={visible ? "visible" : "hidden"} className="flex flex-col">
                 <QuotePanel id={1} />
-            </Suspense>
+                <div className="self-center flex flex-col">
+                    <input placeholder="Type here..." className="bg-white border-2 border-gray-300 rounded-lg p-2" />
+                </div>
+            </Activity>
+            <div className="self-center flex">
+                <button onClick={() => setVisible(!visible)}>Toggle Quote</button>
+            </div>
         </div>
     )
 }

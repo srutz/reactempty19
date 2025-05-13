@@ -10,7 +10,7 @@ body {
 }
 
 button {
-    @apply cursor-pointer;
+    @apply cursor-pointer bg-blue-500 text-white p-2 rounded-lg mt-4 hover:bg-blue-600;
 }
 
 

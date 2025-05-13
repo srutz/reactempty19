@@ -1,4 +1,4 @@
-import { cache, use } from "react"
+import { useEffect, useState } from "react"
 
 export type Quote = {
     id: number
@@ -12,14 +12,9 @@ export async function getQuote(id: number) {
     return await response.json()
 }
 
-const getQuoteCached = cache(async (id: number) => {
-    const response = await fetch(`https://dummyjson.com/quotes/${id}`)
-    return await response.json()
-})
-
 export function QuoteRenderer({ quote }: { quote: Quote }) {
     return (
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="self-center bg-white rounded-lg shadow-lg p-8">
             <p className="quote">{quote.quote}</p>
             <p className="author">- {quote.author}</p>
         </div>
@@ -27,7 +22,13 @@ export function QuoteRenderer({ quote }: { quote: Quote }) {
 }
 
 export function QuotePanel({ id }: { id: number }) {
-    const quote = use(getQuoteCached(id))
+    const [quote, setQuote] = useState<Quote>()
+    useEffect(() => {
+        (async() => setQuote(await getQuote(id)))()
+    }, [id])
+    if (!quote) {
+        return undefined
+    }
     return <QuoteRenderer quote={quote} />
 }
 
