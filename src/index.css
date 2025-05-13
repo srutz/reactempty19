@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+body {
+    @apply bg-white h-[100vh] flex flex-col items-stretch;
+    overflow: hidden;
+}
+
+#root {
+    @apply flex-1 flex flex-col;
+}
+
+button {
+    @apply cursor-pointer;
+}
+
+
+
