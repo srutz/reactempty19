@@ -9,12 +9,12 @@ export type Quote = {
 export async function getQuote(id: number) {
     console.log("Fetching quote from API...")
     const response = await fetch(`https://dummyjson.com/quotes/${id}`)
-    return await response.json()
+    return response.json() as Promise<Quote>
 }
 
 const getQuoteCached = cache(async (id: number) => {
     const response = await fetch(`https://dummyjson.com/quotes/${id}`)
-    return await response.json()
+    return response.json() as Promise<Quote>
 })
 
 export function QuoteRenderer({ quote }: { quote: Quote }) {
@@ -30,4 +30,5 @@ export function QuotePanel({ id }: { id: number }) {
     const quote = use(getQuoteCached(id))
     return <QuoteRenderer quote={quote} />
 }
+
 
