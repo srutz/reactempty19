@@ -1,24 +1,65 @@
-import { memo, useState, type MouseEvent } from "react";
+import { memo, startTransition, useEffect, useOptimistic, useState, useTransition, type MouseEvent } from "react";
 import { cn } from "./lib/utils";
 import { Palette } from "./Palette";
 
-export function App() {
-    const [pos, setPos ] = useState({x: -1, y: -1})
-    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-        const x = e.clientX
-        const y = e.clientX
-        setPos({ x, y })
+
+export function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+export type Quote = {
+    id: number
+    quote: string
+    author: string
+}
+
+export function QuoteRenderer({ quote }: { quote?: Quote }) {
+    if (!quote) {
+        return undefined
     }
     return (
-        <div className={cn("bg-gray-100 h-1 grow flex flex-col justify-center")}>
-            <div className="self-center text-sm">Mouse Position {pos.x}, {pos.y}</div>
-            <div className="self-center p-4 bg-white shadow-lg flex flex-col items-center justify-center"
-                    onMouseLeave={() => setPos({ x: -1, y: -1})}
-                    onMouseMove={handleMouseMove}>
-                <Palette size={50} />
-            </div>
+        <div className="bg-white rounded-lg shadow-lg p-8">
+            <p className="quote">{quote.quote}</p>
+            <p className="text-gray-500 text-sm">- {quote.author}</p>
         </div>
     )
 }
 
-const MemoPalette = memo(Palette)
+
+export async function slowWebcall(id: number) {
+    await delay(2_000)
+    const r = await fetch("https://dummyjson.com/quotes/" + encodeURIComponent(id))
+    return await r.json() as Quote
+}
+
+export function App() {
+    const [id, setId] = useState(1)
+    const [quote, setQuote] = useState<Quote>()
+    const [optimisticQuote, setOptimisticQuote] = useOptimistic(
+        quote,
+        (_, newQuote) => {
+            return newQuote as Quote
+        }
+    )
+    const [isPending, startTransition] = useTransition()
+    useEffect(() => {
+        startTransition(async () => {
+            setOptimisticQuote({
+                id: -1,
+                quote: "Loading quote. ..",
+                author: "Loading author...",
+            });
+            const quote = await slowWebcall(id)
+            setOptimisticQuote(quote)
+            setQuote(quote)
+        })
+    }, [id])
+    console.log("rendering", id, isPending, quote, optimisticQuote)
+    return (
+        <div className={cn("bg-gray-100 h-1 grow flex flex-col justify-center items-center")}>
+            <QuoteRenderer quote={isPending ? optimisticQuote : quote} />
+            <button onClick={() => setId(id + 1)} className="">Load Quote</button>
+        </div>
+    )
+}
+
