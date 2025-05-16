@@ -11,9 +11,6 @@ import { useEffect, useState } from "react"
 
 export function App() {
     const [showSheet, setShowSheet] = useState(false)
-    useEffect(() => {
-        setTimeout(() => setShowSheet(false), 10_000)
-    }, [showSheet])
     return (
         <div className="grow m-8 bg-green-400">
             <HelloSheet open={showSheet}></HelloSheet>
@@ -24,9 +21,11 @@ export function App() {
 
 function HelloSheet({ open: initialOpen }: { open: boolean }) {
     const [ open, setOpen ] = useState(initialOpen)
+    useEffect(() => { setOpen(initialOpen) }, [initialOpen])
     const handleOpenChange = (open_: boolean) => {
         setOpen(open_)
     }
+    console.log("rerender sheet", initialOpen)
     return (
         <Sheet open={open} onOpenChange={handleOpenChange}>
             <SheetContent>
