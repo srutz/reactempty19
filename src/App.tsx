@@ -20,11 +20,24 @@ export function App() {
                 open={showSheet}
                 onOpenChange={setShowSheet}
             />
+            <Counter></Counter>
             <div>Window size {width} x {height} </div>
             <button onClick={() => setShowSheet(!showSheet)}>Toggle Sheet</button>
         </div>
     )
 }
+
+function Counter() {
+    const [count, setCount] = useState(100)
+    return (
+        <div className="flex flex-col gap-2 items-center">
+            {count}
+            <button onClick={() => setCount(count + 1)}>Inc</button>
+        </div>
+    )
+}
+
+
 
 type HelloSheetProps = {
     open: boolean
