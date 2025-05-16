@@ -4,25 +4,34 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
 } from "@/components/ui/sheet"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 
 export function App() {
+
     const [showSheet, setShowSheet] = useState(false)
+
     return (
         <div className="grow m-8 bg-green-400">
-            <HelloSheet open={showSheet} 
-                onOpenChange={setShowSheet} 
+            <HelloSheet
+                open={showSheet}
+                onOpenChange={setShowSheet}
             />
             <button onClick={() => setShowSheet(!showSheet)}>Toggle Sheet</button>
         </div>
     )
 }
 
-function HelloSheet({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
+type HelloSheetProps = {
+    open: boolean
+    onOpenChange: (open: boolean) => void
+}
+
+function HelloSheet({ open, onOpenChange }: HelloSheetProps) {
+
     console.log("rerender sheet", open)
+
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent>
