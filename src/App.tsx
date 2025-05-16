@@ -6,20 +6,22 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { useState } from "react"
 
 
 export function App() {
+    const [showSheet, setShowSheet] = useState(false)
     return (
         <div className="grow m-8 bg-green-400">
-            <HelloSheet></HelloSheet>
+            <HelloSheet open={showSheet}></HelloSheet>
+            <button onClick={() => setShowSheet(!showSheet)}>Toggle Sheet</button>
         </div>
     )
 }
 
-function HelloSheet() {
+function HelloSheet({ open } : { open: boolean }) {
     return (
-        <Sheet>
-            <SheetTrigger>Open</SheetTrigger>
+        <Sheet open={open}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>Are you absolutely sure?</SheetTitle>
