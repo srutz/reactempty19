@@ -5,21 +5,23 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet"
-import { useState } from "react"
 import { useWindowSize } from "./hooks/useWindowSize"
+import { useStateWithStorage } from "./hooks/useStateWithStorage"
 
 
 export function App() {
 
-    const [showSheet, setShowSheet] = useState(false)
+    const [showSheet, setShowSheet] = useStateWithStorage("sheet", false)
     const { width, height} = useWindowSize()
 
     return (
         <div className="grow m-8 bg-green-400">
-            <HelloSheet
-                open={showSheet}
-                onOpenChange={setShowSheet}
+            {!false && (
+                <HelloSheet
+                    open={showSheet}
+                    onOpenChange={setShowSheet}
             />
+            )}
             <Counter></Counter>
             <div>Window size {width} x {height} </div>
             <button onClick={() => setShowSheet(!showSheet)}>Toggle Sheet</button>
@@ -27,8 +29,12 @@ export function App() {
     )
 }
 
+
+
+
 function Counter() {
-    const [count, setCount] = useState(100)
+    const [count, setCount] = useStateWithStorage("key1", 100)
+    console.log("counter", count)
     return (
         <div className="flex flex-col gap-2 items-center">
             {count}
