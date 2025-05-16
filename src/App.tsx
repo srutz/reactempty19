@@ -13,21 +13,18 @@ export function App() {
     const [showSheet, setShowSheet] = useState(false)
     return (
         <div className="grow m-8 bg-green-400">
-            <HelloSheet open={showSheet}></HelloSheet>
+            <HelloSheet open={showSheet} 
+                onOpenChange={setShowSheet} 
+            />
             <button onClick={() => setShowSheet(!showSheet)}>Toggle Sheet</button>
         </div>
     )
 }
 
-function HelloSheet({ open: initialOpen }: { open: boolean }) {
-    const [ open, setOpen ] = useState(initialOpen)
-    useEffect(() => { setOpen(initialOpen) }, [initialOpen])
-    const handleOpenChange = (open_: boolean) => {
-        setOpen(open_)
-    }
-    console.log("rerender sheet", initialOpen)
+function HelloSheet({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
+    console.log("rerender sheet", open)
     return (
-        <Sheet open={open} onOpenChange={handleOpenChange}>
+        <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>Are you absolutely sure?</SheetTitle>
