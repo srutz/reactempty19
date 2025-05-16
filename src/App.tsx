@@ -6,11 +6,13 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet"
 import { useState } from "react"
+import { useWindowSize } from "./hooks/useWindowSize"
 
 
 export function App() {
 
     const [showSheet, setShowSheet] = useState(false)
+    const { width, height} = useWindowSize()
 
     return (
         <div className="grow m-8 bg-green-400">
@@ -18,6 +20,7 @@ export function App() {
                 open={showSheet}
                 onOpenChange={setShowSheet}
             />
+            <div>Window size {width} x {height} </div>
             <button onClick={() => setShowSheet(!showSheet)}>Toggle Sheet</button>
         </div>
     )
@@ -29,6 +32,7 @@ type HelloSheetProps = {
 }
 
 function HelloSheet({ open, onOpenChange }: HelloSheetProps) {
+    const { width, height} = useWindowSize()
 
     console.log("rerender sheet", open)
 
@@ -39,6 +43,7 @@ function HelloSheet({ open, onOpenChange }: HelloSheetProps) {
                     <SheetTitle>Are you absolutely sure?</SheetTitle>
                     <SheetDescription>
                         HELLO HELLO
+                        <div>Window size {width} x {height} </div>
                     </SheetDescription>
                 </SheetHeader>
             </SheetContent>
