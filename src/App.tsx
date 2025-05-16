@@ -6,11 +6,14 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 export function App() {
     const [showSheet, setShowSheet] = useState(false)
+    useEffect(() => {
+        setTimeout(() => setShowSheet(false), 10_000)
+    }, [showSheet])
     return (
         <div className="grow m-8 bg-green-400">
             <HelloSheet open={showSheet}></HelloSheet>
@@ -19,15 +22,18 @@ export function App() {
     )
 }
 
-function HelloSheet({ open } : { open: boolean }) {
+function HelloSheet({ open: initialOpen }: { open: boolean }) {
+    const [ open, setOpen ] = useState(initialOpen)
+    const handleOpenChange = (open_: boolean) => {
+        setOpen(open_)
+    }
     return (
-        <Sheet open={open}>
+        <Sheet open={open} onOpenChange={handleOpenChange}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>Are you absolutely sure?</SheetTitle>
                     <SheetDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
+                        HELLO HELLO
                     </SheetDescription>
                 </SheetHeader>
             </SheetContent>
