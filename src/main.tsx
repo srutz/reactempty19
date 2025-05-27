@@ -4,7 +4,9 @@ import { MdBusAlert } from 'react-icons/md'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router'
 import { QuotesList } from './App.tsx'
 import { Callout } from './Callout.tsx'
+import { Footer } from './Footer.tsx'
 import './index.css'
+import { Komponente } from './Komponente.tsx'
 import { Menubar } from './Menubar.tsx'
 import { QuoteDetails } from './QuoteDetails.tsx'
 
@@ -16,6 +18,7 @@ const router = createBrowserRouter([
                 path: "/", element:
                     <div className="h-1 grow flex flex-col justify-center items-center>">
                         <div className="text-4xl self-center">Home</div>
+                        <Komponente/>
                     </div>
             },
             {
@@ -48,6 +51,7 @@ function App() {
             <div className="h-1 grow flex flex-col">
                 <Outlet></Outlet>
             </div>
+            <Footer/>
             <Callout paths={["/about" ]}>
                 <div className="text-2xl text-white font-bold flex flex-col items-center">
                     <MdBusAlert />

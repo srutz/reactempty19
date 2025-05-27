@@ -23,7 +23,10 @@ export function useQuote(id?: number) {
         queryKey: ["quotedetails", id],
         staleTime: 60_000,
         queryFn: async () => {
-            const r = await fetch("https://www.dummyjson.com/quotes/" + id)
+            const r = await fetch(
+                //"https://www.dummyjson.com/quotes/" + encodeURIComponent(id||"-1")
+                `https://www.dummyjson.com/quotes/${encodeURIComponent(id||"-1")}`
+            )
             return  await r.json() as Quote
         }
     })
