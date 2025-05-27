@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export interface Quote {
@@ -10,13 +11,16 @@ export interface QuotesResponse {
 }
 const PAGE_SIZE = 100
 
-export function App() {
+export function QuotesList() {
     const { page = "1" } = useParams()
     const pageNumber = Number.parseInt(page)
     const { data, refetch } = useQuotes(pageNumber)
     const navigate = useNavigate()
-    console.log("data: ", data?.skip, data?.quotes.length)
+    //console.log("data: ", data?.skip, data?.quotes.length)
     const pageCount = Math.ceil((data?.total??0) / PAGE_SIZE)
+    useEffect(() => {
+        console.log("user requested quotes", pageNumber)
+    }, [pageNumber])
     return (
         <div className="grow flex flex-col gap-2">
             <div className="mt-2 self-center flex gap-2">
@@ -50,7 +54,7 @@ function useQuotes(pageNumber: number) {
     })    
 }
 
-function QuoteView(props: { quote: Quote }) {
+export function QuoteView(props: { quote: Quote }) {
     const { quote } = props
     return (
         <div className="p-2 m-2 flex flex-col gap-2 rounded-lg shadow-xl bg-slate-200">
