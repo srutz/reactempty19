@@ -6,6 +6,7 @@ import { QuotesList } from './App.tsx'
 import { Callout } from './Callout.tsx'
 import './index.css'
 import { Menubar } from './Menubar.tsx'
+import { QuoteDetails } from './QuoteDetails.tsx'
 
 const router = createBrowserRouter([
     {
@@ -18,7 +19,10 @@ const router = createBrowserRouter([
                     </div>
             },
             {
-                path: "/quotes/:page?", element: <QuotesList />
+                path: "/quotes", element: <QuotesList />
+            },
+            {
+                path: "/quotes/:id", element: <QuoteDetails />
             },
             {
                 path: "/about", element:
