@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, type ComponentProps, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router";
+import { cn } from "./lib/utils";
 
 export interface Quote {
     id: number, quote: string, author: string
@@ -32,7 +33,7 @@ export function QuotesList() {
             </div>
             <div className="h-1 grow overflow-auto flex flex-col gap-1">
                 {data?.quotes.map(q => (
-                    <QuoteView quote={q} />
+                    <QuoteView key={q.id} quote={q} />
                 ))}
             </div>
         </div>
@@ -54,15 +55,32 @@ function useQuotes(pageNumber: number) {
     })    
 }
 
+interface BoxProps extends ComponentProps<"div"> { className?: string, children?: ReactNode}
+
+
+type MyProps = { age: number, name: string} & any
+export function Box({ children, className, ...rest } : BoxProps ) {
+    return (
+        <div className={cn("p-2 mx-4 my-2 flex flex-col gap-2",
+                "rounded-lg shadow-xl bg-slate-200", 
+                className)}
+                {...rest}>
+            {children}
+        </div>
+    )
+}
+
 export function QuoteView(props: { quote: Quote }) {
     const { quote } = props
     return (
-        <div className="p-2 m-2 flex flex-col gap-2 rounded-lg shadow-xl bg-slate-200">
+        <Box className="bg-neutral-300"
+
+                title="Hans Hans HAns" style={{ opacity: "1"}}>
             <div>{quote.quote}</div>
             <div className="text-xs text-muted-foreground self-end">
                 {quote.author}
             </div>
-        </div>
+        </Box>
     )
 }
 

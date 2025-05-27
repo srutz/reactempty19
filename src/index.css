@@ -12,6 +12,10 @@ body {
     @apply underline font-semibold;
 }
 
+.box {
+    @apply p-2 mx-4 my-2 flex flex-col gap-2 rounded-lg shadow-xl bg-slate-200;
+}
+
 #root {
     @apply flex-1 flex flex-col;
 }
