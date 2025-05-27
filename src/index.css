@@ -13,7 +13,7 @@ body {
 }
 
 button {
-    @apply cursor-pointer;
+    @apply cursor-pointer rounded-lg px-2 py-1 text-white bg-blue-500 hover:bg-blue-600 border border-gray-300;
 }
 
 @theme inline {
