@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
-import { Fragment } from "react/jsx-runtime";
+import { useNavigate, useParams } from "react-router";
 
 export interface Quote {
     id: number, quote: string, author: string
@@ -9,13 +8,38 @@ export interface QuotesResponse {
     total: number; skip: number; limit: number;
     quotes: Quote[]
 }
+const PAGE_SIZE = 100
+
 export function App() {
     const { page = "1" } = useParams()
     const pageNumber = Number.parseInt(page)
-    const { data } = useQuery({
-        queryKey: ["key1",],
+    const { data, refetch } = useQuotes(pageNumber)
+    const navigate = useNavigate()
+    console.log("data: ", data?.skip, data?.quotes.length)
+    const pageCount = Math.ceil((data?.total??0) / PAGE_SIZE)
+    return (
+        <div className="grow flex flex-col gap-2">
+            <div className="mt-2 self-center flex gap-2">
+                <button disabled={pageNumber < 2} onClick={() => { navigate("/quotes/" + (pageNumber - 1)) }
+                }>Prev</button>
+                <button disabled={pageNumber >= pageCount} onClick={() => { navigate("/quotes/" + (pageNumber + 1)) }
+                }>Next</button>
+                <button onClick={() => refetch()}>Reload data</button> 
+            </div>
+            <div className="h-1 grow overflow-auto flex flex-col gap-1">
+                {data?.quotes.map(q => (
+                    <QuoteView quote={q} />
+                ))}
+            </div>
+        </div>
+    )
+}
+
+function useQuotes(pageNumber: number) {
+    return useQuery({
+        queryKey: ["key1", pageNumber ],
+        placeholderData: d => d,
         queryFn: async () => {
-            const PAGE_SIZE = 13
             const skip = (pageNumber - 1) * PAGE_SIZE
             const limit = PAGE_SIZE
             const response = await fetch(
@@ -23,33 +47,20 @@ export function App() {
             const data = await response.json()
             return data as QuotesResponse
         }
-    })
+    })    
+}
+
+function QuoteView(props: { quote: Quote }) {
+    const { quote } = props
     return (
-        <div className="grow flex flex-col gap-2">
-            <div className="flex gap-2">
-                <button onClick={
-                    () => {
-                        window.location.href = "/quotes/" + (pageNumber - 1)
-                    }
-                }>Prev</button>
-                <button onClick={
-                    () => {
-                        window.location.href = "/quotes/" + (pageNumber + 1)
-                    }
-                }>Next</button>
-            </div>
-            <div className="h-1 grow m-8 bg-green-400 overflow-auto gap-x-2 grid grid-cols-[auto_1fr]">
-                {data?.quotes.map(q => (
-                    <Fragment key={q.id}>
-                        <div className="gap-2 text-nowrap">{q.id}</div>
-                        <div> {q.quote}</div>
-                    </Fragment>
-                ))}
+        <div className="p-2 m-2 flex flex-col gap-2 rounded-lg shadow-xl bg-slate-200">
+            <div>{quote.quote}</div>
+            <div className="text-xs text-muted-foreground self-end">
+                {quote.author}
             </div>
         </div>
     )
 }
-
 
 
 

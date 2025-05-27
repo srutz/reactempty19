@@ -13,7 +13,9 @@ body {
 }
 
 button {
-    @apply cursor-pointer rounded-lg px-2 py-1 text-white bg-blue-500 hover:bg-blue-600 border border-gray-300;
+    @apply rounded-full bg-blue-600 text-white px-6 py-2 font-semibold shadow transition-colors duration-200;
+    @apply hover:bg-blue-700 hover:shadow-lg;
+    @apply disabled:bg-blue-300 disabled:cursor-not-allowed disabled:shadow-none;
 }
 
 @theme inline {
