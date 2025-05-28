@@ -18,15 +18,16 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
-export type ComboBoxOption = { value: string, label: string } 
+export type ComboBoxOption = { value: string, label: string }
 
-export type ComboBoxProps = { 
-    value: string, 
+export type ComboBoxProps = {
+    value: string,
     onValueChange: (value: string) => void
     options: ComboBoxOption[]
+    showSearch?: boolean
 }
 
-export function ComboBox({ options, value, onValueChange }: ComboBoxProps) {
+export function ComboBox({ options, value, onValueChange, showSearch = true }: ComboBoxProps) {
     const [open, setOpen] = React.useState(false)
 
     return (
@@ -46,7 +47,9 @@ export function ComboBox({ options, value, onValueChange }: ComboBoxProps) {
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
                 <Command>
-                    <CommandInput placeholder="Search framework..." />
+                    {showSearch && (
+                        <CommandInput placeholder="Search option..." />
+                    )}
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>

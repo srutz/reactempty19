@@ -31,20 +31,25 @@ export function App() {
         name: "",
         email: "",
         weather: ""
-    }) 
-    
+    })
+
     const handleChange1 = (e: ChangeEvent<HTMLInputElement>) => {
         form.name = e.target.value
         setForm(structuredClone(form))
     }
     const handleChange2 = (e: ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, age: Number.parseInt(e.target.value)})
+        setForm({ ...form, age: Number.parseInt(e.target.value) })
     }
     const handleChange3 = (e: ChangeEvent<HTMLInputElement>) => {
-        const newForm = {...form}
+        const newForm = { ...form }
         newForm.email = e.target.value
         setForm(newForm)
     }
+    const options = [
+        { label: "Glatt", value: "slippery"},
+        { label: "Warm", value: "warm" }, 
+        { label: "Nass", value: "rain" },
+    ]
     return (
         <div className="grow m-8 flex flex-col gap-2">
             <label htmlFor="i1">Name</label>
@@ -59,9 +64,11 @@ export function App() {
             <Input id="i3" value={form.email} type="email"
                 onChange={handleChange3}
             />
-            <ComboBox options={[ { label: "Warm", value: "warm"}, { label: "Nass", value: "rain" }]}
+            <label>Präferiertes Wetter</label>
+            <ComboBox options={options}
                 value={form.weather}
-                onValueChange={(v) => setForm({...form, weather: v})}
+                showSearch={false}
+                onValueChange={(v) => setForm({ ...form, weather: v })}
             ></ComboBox>
             <Toaster />
         </div>
