@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent } from "react";
+import { ComboBox } from "./components/ComboBox";
 import { Input } from "./components/ui/input";
 import { Toaster } from "./components/ui/sonner";
 
@@ -21,6 +22,7 @@ type FormContent = {
     age: number
     name: string
     email: string
+    weather: string
 }
 
 export function App() {
@@ -28,6 +30,7 @@ export function App() {
         age: 0,
         name: "",
         email: "",
+        weather: ""
     }) 
     
     const handleChange1 = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +59,10 @@ export function App() {
             <Input id="i3" value={form.email} type="email"
                 onChange={handleChange3}
             />
+            <ComboBox options={[ { label: "Warm", value: "warm"}, { label: "Nass", value: "rain" }]}
+                value={form.weather}
+                onValueChange={(v) => setForm({...form, weather: v})}
+            ></ComboBox>
             <Toaster />
         </div>
     )
