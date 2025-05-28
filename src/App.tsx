@@ -1,5 +1,4 @@
 import { useEffect, useState, type ChangeEvent } from "react";
-import { toast } from "sonner";
 import { Input } from "./components/ui/input";
 import { Toaster } from "./components/ui/sonner";
 
@@ -10,10 +9,7 @@ function useStateWithLocalStorage<T>(key: string, initializer: T | (() => T)) {
         if (v) {
             return JSON.parse(v) as T
         }
-        if (typeof initializer === "function") {
-            return (initializer as () => T)()
-        }
-        return initializer
+        return initializer instanceof Function ? initializer() : initializer
     })
     useEffect(() => {
         localStorage.setItem(key, JSON.stringify(value))
@@ -21,24 +17,25 @@ function useStateWithLocalStorage<T>(key: string, initializer: T | (() => T)) {
     return [value, setValue] as const
 }
 
+type FormContent = {
+    age: number
+    name: string
+    email: string
+}
+
 export function App() {
-    const [age, setAge] = useStateWithLocalStorage("input-age", 27)
-    const [name, setName] = useStateWithLocalStorage("input-name2", () => "ppp")
-    const [email, setEmail] = useStateWithLocalStorage("input-email", () => "")
-    console.log("rerender App", name, age, email)
-    const handleChange1 = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)
+    const [form, setForm] = useStateWithLocalStorage<FormContent>("input-form", {
+        age: 0,
+        name: "",
+        email: "",
+    }) 
+    
+    const handleChange1 = (e: ChangeEvent<HTMLInputElement>) => 
+        setName(e.target.value)
     const handleChange2 = (e: ChangeEvent<HTMLInputElement>) =>
         setAge(Number.parseInt(e.target.value))
-    const handleChange3 = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)
-    useEffect(() => {
-        if (age == 66) {
-            toast("Achtung, Du bist alt geworden.", {
-                closeButton: true,
-                dismissible: true,
-                duration: 5_000
-            })
-        }
-    }, [age])
+    const handleChange3 = (e: ChangeEvent<HTMLInputElement>) => 
+        setEmail(e.target.value)
     return (
         <div className="grow m-8 flex flex-col gap-2">
             <label htmlFor="i1">Name</label>
@@ -54,7 +51,6 @@ export function App() {
             <Input disabled={age > 100} id="i3" value={email} type="email"
                 onChange={handleChange3}
             />
-
             <Toaster />
         </div>
     )
