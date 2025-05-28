@@ -1,24 +1,12 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, type ChangeEvent } from "react";
+import { toast } from "sonner";
 import { ComboBox } from "./components/ComboBox";
 import { Input } from "./components/ui/input";
 import { Toaster } from "./components/ui/sonner";
+import { useFormStore } from "./hooks/FormStore";
 
-function useStateWithLocalStorage<T>(key: string, initializer: T | (() => T)) {
-    const [value, setValue] = useState(() => {
-        // initialisier-funktion
-        let v = localStorage.getItem(key)
-        if (v) {
-            return JSON.parse(v) as T
-        }
-        return initializer instanceof Function ? initializer() : initializer
-    })
-    useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(value))
-    }, [value])
-    return [value, setValue] as const
-}
 
-type FormContent = {
+export type FormContent = {
     age: number
     name: string
     email: string
@@ -26,12 +14,32 @@ type FormContent = {
 }
 
 export function App() {
-    const [form, setForm] = useStateWithLocalStorage<FormContent>("input-form", {
-        age: 0,
-        name: "",
-        email: "",
-        weather: ""
-    })
+    return (
+        <div className="h-1 grow flex flex-col">
+            <div className="h-1 grow flex flex-col">
+                <Form/>
+            </div>
+            <Footer></Footer>
+        </div>
+    )
+}
+function Footer() {
+    //const { form } = useFormContext()
+    const { form } = useFormStore()
+    useEffect(() => {
+        if (form.weather == "slippery") {
+            toast("Aufpassen ist Glatt", {
+                duration: 5_000,
+            })
+        }
+    }, [form.weather])
+    return (
+        <div className="bg-slate-300 h-8">Footer / Wetter {form.weather}</div>
+    )
+}
+export function Form() {
+    //const {form, setForm } = useFormContext()
+    const {form, setForm } = useFormStore()
 
     const handleChange1 = (e: ChangeEvent<HTMLInputElement>) => {
         form.name = e.target.value
@@ -66,8 +74,9 @@ export function App() {
             />
             <label>Präferiertes Wetter</label>
             <ComboBox options={options}
-                value={form.weather}
                 showSearch={false}
+                style="wide"
+                value={form.weather}
                 onValueChange={(v) => setForm({ ...form, weather: v })}
             ></ComboBox>
             <Toaster />
