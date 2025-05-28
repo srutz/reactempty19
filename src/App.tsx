@@ -30,25 +30,30 @@ export function App() {
         email: "",
     }) 
     
-    const handleChange1 = (e: ChangeEvent<HTMLInputElement>) => 
-        setName(e.target.value)
-    const handleChange2 = (e: ChangeEvent<HTMLInputElement>) =>
-        setAge(Number.parseInt(e.target.value))
-    const handleChange3 = (e: ChangeEvent<HTMLInputElement>) => 
-        setEmail(e.target.value)
+    const handleChange1 = (e: ChangeEvent<HTMLInputElement>) => {
+        form.name = e.target.value
+        setForm(structuredClone(form))
+    }
+    const handleChange2 = (e: ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, age: Number.parseInt(e.target.value)})
+    }
+    const handleChange3 = (e: ChangeEvent<HTMLInputElement>) => {
+        const newForm = {...form}
+        newForm.email = e.target.value
+        setForm(newForm)
+    }
     return (
         <div className="grow m-8 flex flex-col gap-2">
             <label htmlFor="i1">Name</label>
-            <Input id="i1" value={name}
+            <Input id="i1" value={form.name}
                 onChange={handleChange1}
             />
             <label htmlFor="i2">Age2</label>
-            <Input id="i2" value={age} type="number"
+            <Input id="i2" value={form.age} type="number"
                 onChange={handleChange2}
             />
-            {age > 100 && (<div className="text-red-500 text-xs">ZU ALT</div>)}
             <label htmlFor="i3">E-Mail</label>
-            <Input disabled={age > 100} id="i3" value={email} type="email"
+            <Input id="i3" value={form.email} type="email"
                 onChange={handleChange3}
             />
             <Toaster />
