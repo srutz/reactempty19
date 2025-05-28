@@ -9,7 +9,7 @@ export function App() {
     return (
         <div className="grow m-8 bg-green-400 flex flex-col gap-2" onMouseMove={handleMouseMove}>
             <div>Coords: {coords.x} x {coords.y}</div>
-            <Palette size={70} />
+            <Palette size={100} />
         </div>
     )
 }

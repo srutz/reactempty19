@@ -14,7 +14,7 @@ export default defineConfig({
                     ["babel-plugin-react-compiler", {
                         sources: (filename: any) => {
                             console.log("filename", filename)
-                            return true
+                            return  true
                         }
                     }],
                 ],

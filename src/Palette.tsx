@@ -10,6 +10,7 @@ import { cn } from "./lib/utils"
 export function Palette({size, className} : { size: number, className?: string }) {
     const w = 6
     const h = 6
+    console.log("render palette")
     return (
         <div style={{ gridTemplateColumns: "repeat(" + size + ", 1fr)"}}
             className={cn("self-center grid gap-[1px]", 
